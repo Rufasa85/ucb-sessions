@@ -1,5 +1,7 @@
 const express = require("express");
 const allRoutes = require("./controllers");
+const session = require("express-session");
+const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 const sequelize = require("./config/connection");
 
@@ -7,6 +9,19 @@ const sequelize = require("./config/connection");
 // =============================================================
 const app = express();
 const PORT = process.env.PORT || 3000;
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    saveUninitialized: true,
+    resave: false,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 2,
+    },
+    store: new SequelizeStore({
+      db: sequelize,
+    }),
+  })
+);
 // Requiring our models for syncing
 const { User } = require("./models");
 
