@@ -24,6 +24,9 @@ router.get("/secretclub", (req, res) => {
   }
 });
 
+const htmlRoutes = require("./htmlRoutes.js");
+router.use("/", htmlRoutes);
+
 const userRoutes = require("./userRoutes.js");
 router.use("/api/users", userRoutes);
 

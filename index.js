@@ -1,6 +1,7 @@
 const express = require("express");
 const allRoutes = require("./controllers");
 const session = require("express-session");
+const exphbs = require("express-handlebars");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 const sequelize = require("./config/connection");
@@ -30,7 +31,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Static directory
+// Static directory
 app.use(express.static("public"));
+
+const hbs = exphbs.create({});
+app.engine("handlebars", hbs.engine);
+app.set("view engine", "handlebars");
 
 app.use("/", allRoutes);
 

@@ -18,8 +18,12 @@ router.get("/", (req, res) => {
 //create
 router.post("/", (req, res) => {
   User.create(req.body)
-    .then((data) => {
-      res.json(data);
+    .then((newUser) => {
+      req.session.user = {
+        id: newUser.id,
+        email: newUser.email,
+      };
+      res.json(newUser);
     })
     .catch((err) => {
       console.log(err);
@@ -36,10 +40,10 @@ router.post("/login", (req, res) => {
   })
     .then((foundUser) => {
       if (!foundUser) {
-        return res.status(404).json({ msg: "invalid login credentials" });
+        return res.status(401).json({ msg: "invalid login credentials" });
       }
       if (!bcrypt.compareSync(req.body.password, foundUser.password)) {
-        return res.status(404).json({ msg: "invalid login credentials" });
+        return res.status(401).json({ msg: "invalid login credentials" });
       }
       //compare provided password with saved password
       //remember who they are if the logged in succesfully

@@ -16,11 +16,14 @@ router.get("/", (req, res) => {
 
 //create
 router.post("/", (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ msg: "login first your knucklehead" });
+  }
   Dog.create({
     name: req.body.name,
     age: req.body.age,
     breed: req.body.breed,
-    UserId: req.body.UserId,
+    UserId: req.session.user.id,
   })
     .then((data) => {
       res.json(data);
