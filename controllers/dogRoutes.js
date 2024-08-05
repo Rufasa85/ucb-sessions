@@ -16,7 +16,12 @@ router.get("/", (req, res) => {
 
 //create
 router.post("/", (req, res) => {
-  Dog.create(req.body)
+  Dog.create({
+    name: req.body.name,
+    age: req.body.age,
+    breed: req.body.breed,
+    UserId: req.body.UserId,
+  })
     .then((data) => {
       res.json(data);
     })
